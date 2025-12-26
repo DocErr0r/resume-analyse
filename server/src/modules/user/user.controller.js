@@ -5,16 +5,13 @@ import * as userService from "./user.service.js";
 
 export const registerUser = asyncHandler(async (req, res, next) => {
     try {
-        const { name, username, email, password } = req.body;
-        if (!name || !email || !password) {
-            return next(new Error("All fields are required"));
-        }
+        const { name, email, password } = req.body;
         const existUser = await userService.getUserByEmail(email, false);
         if (existUser) {
             return res.status(400).json({ message: "User already exists" });
         }
-        const user = await userService.createUser(name, username, email, password);
-        res.status.status(201).json({
+        const user = await userService.createUser(name, email, password);
+        res.status(201).json({
             success: true,
             data: { user },
             message: "User registered successfully",
@@ -27,9 +24,6 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 export const loginUser = asyncHandler(async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) {
-            return next(new Error("All fields are required"));
-        }
         const user = await userService.getUserByEmail(email, true);
         if (!user) {
             return res.status(400).json({ message: "Invalid credentials" });
@@ -42,7 +36,6 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         delete user.password;
         res.status(200).json({
             success: true,
-            // data: { user},
             message: "User logged in successfully",
         });
     } catch (error) {
