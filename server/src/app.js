@@ -5,6 +5,7 @@ import { connectDB } from './config/db.js';
 import { ErrorMiddelware } from './middleware/ErrorMiddleware.js';
 import { authRoutes } from './modules/user/user.route.js';
 import cookieparser from 'cookie-parser';
+import { resumeRoutes } from './modules/resumes/resume.route.js';
 
 export const app = express();
 connectDB()
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieparser());
 
 app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/resume', resumeRoutes)
 
 app.get('/test', async (req, res) => {
     const users = await prisma.user.findMany();
