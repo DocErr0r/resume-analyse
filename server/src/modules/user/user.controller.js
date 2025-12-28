@@ -1,5 +1,6 @@
 
 import asyncHandler from "../../utils/asyncHandler.js";
+import AppError from "../../utils/ErrorClass.js";
 import * as userService from "./user.service.js";
 
 
@@ -8,7 +9,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         const { name, email, password } = req.body;
         const existUser = await userService.getUserByEmail(email, false);
         if (existUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return new AppError('User already exist',400)
         }
         const user = await userService.createUser(name, email, password);
         res.status(201).json({
@@ -26,11 +27,11 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         const { email, password } = req.body;
         const user = await userService.getUserByEmail(email, true);
         if (!user) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            throw new AppError('Invalid credentials',400);
         }
         const isMatch = await userService.comparePassword(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            throw new AppError('Invalid credentials',400);
         }
         userService.genertateToken(res, user);
         delete user.password;
