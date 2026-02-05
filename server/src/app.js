@@ -7,6 +7,7 @@ import { authRoutes } from './modules/user/user.route.js';
 import cookieparser from 'cookie-parser';
 import { resumeRoutes } from './modules/resumes/resume.route.js';
 import { jobDescriptionRoutes } from './modules/jobdescription/jobdescription.route.js';
+import { analysisRoutes } from './modules/analysis/analysis.route.js';
 
 export const app = express();
 connectDB()
@@ -18,6 +19,7 @@ app.use(cookieparser());
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/resume', resumeRoutes)
 app.use('/api/v1/job-description', jobDescriptionRoutes)
+app.use('/api/v1/analysis', analysisRoutes)
 
 app.get('/test', async (req, res) => {
     const users = await prisma.user.findMany();

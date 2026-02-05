@@ -1,5 +1,4 @@
 import { prisma } from "../../lib/prisma.js";
-import asyncHandler from "../../utils/asyncHandler.js";
 import AppError from "../../utils/ErrorClass.js";
 
 export const createResume = async (userId, fileUrl, text) => {

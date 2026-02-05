@@ -23,6 +23,7 @@ model User {
 
   resumes   Resume[]  // One-to-many relationship with Resume
   jobs JobDescription[]
+  analyses  Analysis[]
 }
 
 model Resume {
@@ -32,6 +33,8 @@ model Resume {
   text       String?
   uploadedAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  analysis   Analysis[]
+
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -42,6 +45,26 @@ model JobDescription {
   company     String?
   description String
   createdAt   DateTime @default(now())
+  analysis    Analysis[]
 
   user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Analysis {
+  id           String   @id @default(ulid())
+  userId       Int
+  resumeId     String
+  jobId        String
+
+  matchScore   Int
+  strengths    String
+  weaknesses   String
+  suggestions  String
+
+  createdAt    DateTime @default(now())
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume Resume         @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  job    JobDescription @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
